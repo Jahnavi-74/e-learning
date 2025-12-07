@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p class="user-role">Teacher Dashboard</p>
+    </div>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>{{ classes|length }}</h3>
+            <p>Active Classes</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="total-students">0</h3>
+            <p>Total Students</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="total-activities">0</h3>
+            <p>Total Activities</p>
+        </div>
+    </div>
+    
+    <div class="dashboard-actions">
+        <button class="btn btn-primary" onclick="showCreateClassModal()">Create New Class</button>
+        <button class="btn btn-secondary" onclick="loadRecommendations()">View Recommendations</button>
+    </div>
+    
+    <div class="classes-section">
+        <h2>Your Classes</h2>
+        {% if classes|length == 0 %}
+        <div class="empty-state">
+            <p>You haven't created any classes yet. Click "Create New Class" to get started!</p>
+        </div>
+        {% else %}
+        <div class="classes-grid" id="classesGrid">
+            {% for class in classes %}
+            <div class="class-card" onclick="openClass({{ class.id }})">
+                <h3>{{ class.title }}</h3>
+                <p>{{ class.description }}</p>
+                <div class="class-code-container">
+                    <div class="class-code">Class Code: <strong>{{ class.class_code }}</strong></div>
+                    <button class="btn btn-small btn-copy" onclick="event.stopPropagation(); copyClassCode('{{ class.class_code }}')" title="Copy class code">📋 Copy Code</button>
+                </div>
+                <div class="class-actions">
+                    <button class="btn btn-small" onclick="event.stopPropagation(); viewAnalytics({{ class.id }})">📊 Analytics</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Create Class Modal -->
+<div id="createClassModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('createClassModal')">&times;</span>
+        <h2>Create New Class</h2>
+        <form id="createClassForm">
+            <div class="form-group">
+                <label for="classTitle">Class Title *</label>
+                <input type="text" id="classTitle" name="title" placeholder="e.g., Introduction to Web Development" required>
+            </div>
+            <div class="form-group">
+                <label for="classDescription">Description</label>
+                <textarea id="classDescription" name="description" rows="3" placeholder="Brief description of the class..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Class</button>
+        </form>
+        <div id="createClassMessage" class="message"></div>
+    </div>
+</div>
+
+<!-- Class Detail Modal -->
+<div id="classDetailModal" class="modal">
+    <div class="modal-content modal-large">
+        <span class="close" onclick="closeModal('classDetailModal')">&times;</span>
+        <div id="classDetailContent"></div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/teacher.js') }}"></script>
+{% endblock %}
+

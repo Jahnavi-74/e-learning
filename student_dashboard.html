@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p class="user-role">Student Dashboard</p>
+    </div>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>{{ user.points }}</h3>
+            <p>Total Points</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="badge-count">{{ user.badges|length }}</h3>
+            <p>Badges Earned</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ classes|length }}</h3>
+            <p>Enrolled Classes</p>
+        </div>
+    </div>
+    
+    <div class="dashboard-actions">
+        <button class="btn btn-primary" onclick="showJoinClassModal()">Join Class</button>
+        <button class="btn btn-secondary" onclick="loadRecommendations()">View Recommendations</button>
+        <button class="btn btn-secondary" onclick="showBadges()">My Badges</button>
+    </div>
+    
+    <div class="classes-section">
+        <h2>Your Classes</h2>
+        {% if classes|length == 0 %}
+        <div class="empty-state">
+            <p>You haven't joined any classes yet. Click "Join Class" and enter a class code to get started!</p>
+        </div>
+        {% else %}
+        <div class="classes-grid" id="classesGrid">
+            {% for class in classes %}
+            <div class="class-card" onclick="openClass({{ class.id }})">
+                <h3>{{ class.title }}</h3>
+                <p>{{ class.description }}</p>
+                <div class="class-code">Class Code: <strong>{{ class.class_code }}</strong></div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Join Class Modal -->
+<div id="joinClassModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('joinClassModal')">&times;</span>
+        <h2>Join Class</h2>
+        <p style="margin-bottom: 1rem; color: #666;">Enter the class code provided by your teacher</p>
+        <form id="joinClassForm">
+            <div class="form-group">
+                <label for="classCode">Class Code *</label>
+                <input type="text" id="classCode" name="class_code" placeholder="e.g., WEB101" required style="text-transform: uppercase;">
+            </div>
+            <button type="submit" class="btn btn-primary">Join Class</button>
+        </form>
+        <div id="joinClassMessage" class="message"></div>
+    </div>
+</div>
+
+<!-- Class Detail Modal -->
+<div id="classDetailModal" class="modal">
+    <div class="modal-content modal-large">
+        <span class="close" onclick="closeModal('classDetailModal')">&times;</span>
+        <div id="classDetailContent"></div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
+{% endblock %}
+

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Interactive E-Learning Platform</h1>
+        <p>Boost student focus and participation with gamification, quizzes, polls, and real-time engagement</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('register') }}" class="btn btn-secondary">Sign Up</a>
+        </div>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🎮</div>
+            <h3>Gamification</h3>
+            <p>Earn points, badges, and compete on leaderboards</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">❓</div>
+            <h3>Quizzes & Polls</h3>
+            <p>Interactive quizzes and polls for real-time engagement</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <h3>Challenges</h3>
+            <p>Complete mini-challenges to earn rewards</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Analytics</h3>
+            <p>Track progress and get personalized recommendations</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
